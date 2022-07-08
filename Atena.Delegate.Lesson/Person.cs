@@ -11,7 +11,7 @@
     public class Client : Person
     {
 
-        public int _AccountNumber;
+        public long _AccountNumber;
 
         public Client(Person p) : base(p._CF)
         {

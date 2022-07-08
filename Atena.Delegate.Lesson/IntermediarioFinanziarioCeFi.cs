@@ -1,4 +1,5 @@
 ﻿using Atena.Delegate.Lesson.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Atena.Delegate.Lesson
@@ -10,30 +11,36 @@ namespace Atena.Delegate.Lesson
 
         public void CreateAccount(Person p)
         {
-
-            Client c = new Client(p) { _AccountNumber = 1225555 };
+            long number = new Random().Next(10000,1000000);
+            Client c = new Client(p) { _AccountNumber = number };
             _clients.Add(c);
         }
         // public abstract void CreateAccount2(Person p);
         public IntermediarioFinanziarioCeFi()
         {
             _clients = new List<Client>();
-
         }
-
         public abstract void Withdraw();
         public abstract void Deposit();
         public abstract void CheckAccount();
     }
     public class Bank : IntermediarioFinanziarioCeFi, IInternationalBank
-    {   
-        public void InternationalWithdraw(InternationalWithdraw InternationalBank)   /// International  ESTERO
+    {
+        string _name;
+        public Bank(string Name)
         {
-            InternationalBank();
+            _name = Name;
+        }
+        public void InternationalWithdraw(InternationalWithdraw Withdraw)   /// International  ESTERO
+        {
+            Withdraw(); 
+            Console.ForegroundColor = ConsoleColor.Red;
+            System.Console.WriteLine("Stai prelevando all'estero!");
+            Console.ResetColor();
         }
         public override void Withdraw() /// Nazionale  LOCAL
         {
-            
+            System.Console.WriteLine($"Sto prelevando con la mia banca {_name}");
         }
 
         public override void Deposit() { }
