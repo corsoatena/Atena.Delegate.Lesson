@@ -4,7 +4,7 @@ using static Atena.Delegate.Lesson.Program;
 
 namespace Atena.Delegate.Lesson
 {  
-    public delegate string PersonalWalletAction();
+    public delegate void PersonalWalletAction(string s);
     public class Program
     {
 
@@ -15,7 +15,7 @@ namespace Atena.Delegate.Lesson
 
 
 
-        static PersonalWalletAction functionSanitaria; 
+        static PersonalWalletAction DatiSanitari; 
         static void Main(string[] args)
         {
 
@@ -46,14 +46,24 @@ namespace Atena.Delegate.Lesson
             /// l'indirizzo di  di una una funzione  
             /// 
             PersonaWallet brunoWallet = new PersonaWallet();
-            functionSanitaria += brunoWallet.GetSituzioneSanitaria;
-            AssicurazioneSanitaria Allianz = new AssicurazioneSanitaria();
 
-            Allianz.RichiestaAssicurazione(functionSanitaria); 
+           // DatiSanitari += brunoWallet.GetSituazioneSanitaria;
+            AssicurazioneSanitaria Allianz = new AssicurazioneSanitaria(Notification);
 
-        } 
+            Allianz.WithDraw(10000); 
+            Allianz.CancellazioneAssicurazione();
 
+
+            ///CALLBACK     ->>> UNA FUNZIONE CHE VIENE ESEGUITA DA  UNA'ATTORE E RITORNA UN VALORE AL SUO PROPRIETARIO
+        }
+        static public void Notification(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
     }
+    
     //public class Translation
     //{
     //    public void English() { Console.WriteLine("I'm translating in ENG"); }
@@ -90,18 +100,38 @@ namespace Atena.Delegate.Lesson
         {
             return _fedinaPenale;
         }
-        public string GetSituzioneSanitaria()
+        public string GetSituazioneSanitaria() /// OVERWRITE
         {
             return _cartellaClinica;
         }
-    }
+        public void GetSituazioneSanitaria(string s) // OVERLOADING 
+        {
+            Console.WriteLine("");
+        }
+        public void GetSituazioneSanitaria(int n) // OVERLOADING 
+        {
 
+        }
+       
+    }
     public class AssicurazioneSanitaria
     {
 
-        public void RichiestaAssicurazione(PersonalWalletAction action) // Solo una funzione e non un interno oggetto personale
+        Action<string> _notify; 
+        public void WithDraw( decimal amount) // Solo una funzione e non un interno oggetto personale
         {
-            Console.WriteLine(action());
+            Console.WriteLine(" creazione assicurazione in corso");
+            Console.WriteLine("Prelievo eseguito! ");
+            _notify("Prelevato: " + amount.ToString()+ " EURO");
+        }
+        public AssicurazioneSanitaria(Action<string> alertMe)
+        {
+            _notify = alertMe;
+        }
+        public void CancellazioneAssicurazione() // Solo una funzione e non un interno oggetto personale
+        {
+            Console.WriteLine("... cancellazione assicurazione in corso");
+            _notify("....cancellazione eseguita! ");
         }
     }
 
